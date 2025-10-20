@@ -24,8 +24,17 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue';
+
+interface ToggleSlotProps {
+  openModal: () => void;
+}
+
+const slots = defineSlots<{
+  'body-content'?: (props: {}) => any;
+  'toggle-btn'?: (props: ToggleSlotProps) => any;
+}>()
 
 const props = defineProps({
   template: {

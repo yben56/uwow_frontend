@@ -17,7 +17,7 @@
         </div>
       </div>
     </div>
-    <div v-else class="flex flex-col">
+    <div v-else class="flex flex-col" v-if="data">
       <!--Product Page-->
       <img :src="data.image" />
       <b class="mt-5 text-xl">{{ data.title }}</b>
@@ -33,8 +33,16 @@
 import { onMounted, ref } from 'vue';
 import axios from 'axios';
 
-const data = ref('');
-const seenin_data = ref('');
+interface Product {
+  id: number
+  type: string
+  image: string
+  title: string
+  description: string
+}
+
+const data = ref<Product | null>(null);
+const seenin_data = ref<Product[]>([]);
 const seein_show = ref(false);
 const props = defineProps({
   id: {
@@ -57,8 +65,9 @@ onMounted(async () => {
 const showSeenIn = async () => {
   seein_show.value = true;
   
-  if (seenin_data.value == '' ) { // prevent ajax fetch data again
+  if (seenin_data.value.length === 0) { // prevent ajax fetch data again
     try {
+      if (!data.value) return;
       const response = await axios.get('/database/seenin.json?id=' + data.value.id);
       seenin_data.value = response.data;
     } catch (error) {

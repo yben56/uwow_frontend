@@ -19,7 +19,15 @@ import ModalComp from '@/components/ModalComp.vue';
 import ProductView from '@/views/ProductView.vue';
 import axios from 'axios';
 
-const data = ref('')
+interface Product {
+  id: number
+  type: string
+  image: string
+  title: string
+  description: string
+}
+
+const data = ref<Product[]>([])
 
 onMounted(async () => {
   try {
